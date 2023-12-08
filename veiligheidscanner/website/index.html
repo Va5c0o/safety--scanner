@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Veiligheidsscanner</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Veiligheidsscanner</h1>
+        <hr>
+        <h2>Netwerkscan</h2>
+        <form action="/scan.py" method="post">
+            <div class="form-group">
+                <label for="ip-address">Voer IP-adres in:</label>
+                <input placeholder="127.001.567" class="form-control" id="ip-address" name="ip-address">
+            </div>
+            <button type="submit" class="btn btn-primary">Scan</button>
+        </form>
+        
+        <h2 class="mt-5">Webapplicatiescan</h2>
+        <form action="/scan.py" method="post">
+            <div class="form-group">
+                <label for="url">Voer URL in:</label>
+                <input placeholder="https://www.voorbeeld.com/" type="text" class="form-control" id="url" name="url">
+            </div>
+            <button type="submit" class="btn btn-primary">Scan</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
