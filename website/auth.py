@@ -3,6 +3,9 @@ from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
+from flask import jsonify
+import datetime
+
 
 auth = Blueprint('auth', __name__)
 
@@ -36,6 +39,7 @@ def logout():
 def signup():
     if request.method == 'POST':
         email = request.form.get('email')
+        username = request.form.get('username')  # Nieuw: Ophalen van de gebruikersnaam
         first_name = request.form.get('firstName')
         last_name = request.form.get('lastName')
         password1 = request.form.get('password1')
@@ -44,8 +48,8 @@ def signup():
         user = User.query.filter_by(email=email).first()
         if user:
             flash('Email already exists', category='error')
-        elif len(email) < 4:
-            flash('Email must be greater than 4 characters', category='error')
+        elif len(email) < 4 or len(username) < 4:  # Controleer op minimale lengte van gebruikersnaam en email
+            flash('Email and username must be greater than 4 characters', category='error')
         elif len(first_name) < 2:
             flash('First name must be greater than 2 characters', category='error')
         elif len(last_name) < 2:
@@ -55,7 +59,8 @@ def signup():
         elif len(password1) < 7:
             flash('Password must be greater than 7 characters!', category='error')
         else:
-            new_user = User(email=email, first_name=first_name, last_name=last_name, password=generate_password_hash(password1, method='pbkdf2:sha256'))
+            # Nieuw: Maak een nieuwe gebruiker met de ingevoerde gebruikersnaam
+            new_user = User(email=email, username=username, first_name=first_name, last_name=last_name, password=generate_password_hash(password1, method='pbkdf2:sha256'))
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True)  # Gebruik 'new_user' in plaats van 'user'
@@ -63,3 +68,42 @@ def signup():
             return redirect(url_for('views.home'))
 
     return render_template("signup.html", user=current_user)
+
+@auth.route('/cli', methods=['GET', 'POST'])
+@login_required
+def cli():
+    if request.method == 'POST':
+        user_input = request.form.get('userInput')  # Haal de invoer van de gebruiker op
+        
+        # Voer de nodige logica uit op basis van de gebruikersinvoer
+        # Hier simuleren we slechts een antwoord op basis van de invoer
+        responses = {
+            'hallo': 'Hallo! Hoe gaat het?',
+            'tijd': datetime.datetime.now().strftime("%H:%M:%S"),
+            'help': 'Beschikbare commando\'s: hallo, tijd, help, vasco',
+            'vasco': 'Hallo mijn naam is Vasco, ik ben de maker en bedenker van deze safetyscanner'
+        }
+        
+        # Haal de bijpassende respons voor de ingevoerde tekst
+        response = responses.get(user_input.lower(), 'Commando niet herkend. Typ "help" voor beschikbare commando\'s.')
+        
+        # Geef de respons terug als JSON
+        return jsonify({'response': response})
+    
+    return render_template('cli.html', user=current_user)
+
+@auth.route('/update-username', methods=['POST'])
+@login_required
+def update_username():
+    new_username = request.form.get('new_username')
+
+    # Haal de huidige gebruiker op
+    user = current_user
+    if len(new_username) < 4:
+        flash('Username must be greater than 4 characters', category='error')
+    else:
+        user.username = new_username
+        db.session.commit()
+        flash('Username updated!', category='success')
+
+    return redirect(url_for('views.profile'))

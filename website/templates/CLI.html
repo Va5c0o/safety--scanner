@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}CLI{% endblock %}
+
+{% block content %}
+<style>
+  .cli-container {
+  width: 80%;
+  max-width: 600px;
+  margin: 20px auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-family: monospace;
+  background-color: black;
+  color: white;
+}
+.cli-input {
+  color: limegreen;
+}
+</style>
+<br>
+<h1 align="center">
+  Command Line Interface (CLI)
+</h1>
+<br>
+<div>
+  <div id="cli-output"></div>
+  <div><span class="cli-input">gebruiker@{{user}}:~$</span> <span id="userInput" contenteditable="true"></span></div>
+</div>
+
+<script>
+const cliOutput = document.getElementById("cli-output");
+const userInput = document.getElementById("userInput");
+
+userInput.focus();
+
+userInput.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+      event.preventDefault();
+      let command = userInput.innerText.trim();
+      userInput.innerText = ""; // Leeg de invoer na Enter
+      
+      // Simuleer de verwerking van het commando en toon het resultaat in de CLI-uitvoer
+      fetch("{{ url_for('views.cli') }}", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: new URLSearchParams({ userInput: command })
+      })
+      .then(response => response.json())
+      .then(data => {
+          const output = document.createElement("div");
+          output.innerText = data.response;
+          cliOutput.appendChild(output);
+      })
+      .catch(error => console.error('Error:', error));
+  }
+});
+</script>
+
+{% endblock %}
