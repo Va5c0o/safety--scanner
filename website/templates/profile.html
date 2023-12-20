@@ -10,31 +10,7 @@
   <div class="row">
     <div class="col-md-6">
       <h3>Huidige gegevens</h3>
-      <p><strong>Gebruikersnaam:</strong> {{ user.username }}</p>
       <p><strong>E-mailadres:</strong> {{ user.email }}</p>
-    </div>
-    <div class="col-md-6">
-      <h3>Gebruikersnaam wijzigen</h3>
-      <form method="POST" action="{{ url_for('auth.update_username') }}">
-        <div class="form-group">
-          <label for="new_username">Nieuwe gebruikersnaam:</label>
-          <input type="text" class="form-control" id="new_username" name="new_username" placeholder="Nieuwe gebruikersnaam">
-        </div>
-        <button type="submit" class="btn btn-success">Gebruikersnaam bijwerken</button>
-      </form>
-      <hr>
-      <h3>Wachtwoord wijzigen</h3>
-      <form method="POST" action="{{ url_for('views.update_email') }}">
-        <div class="form-group">
-          <label for="current_password">Huidig wachtwoord:</label>
-          <input type="password" class="form-control" id="current_password" name="current_password" placeholder="Huidig wachtwoord">
-        </div>
-        <div class="form-group">
-          <label for="new_password">Nieuw wachtwoord:</label>
-          <input type="password" class="form-control" id="new_password" name="new_password" placeholder="Nieuw wachtwoord">
-        </div>
-        <button type="submit" class="btn btn-success">Wachtwoord wijzigen</button>
-      </form>
     </div>
   </div>
   <hr>

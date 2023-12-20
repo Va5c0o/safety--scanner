@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
+from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import login_required, current_user, logout_user
 from .models import Note
 from .models import User
@@ -133,8 +134,6 @@ def profile():
         
         # Haal de huidige gebruiker op
         user = current_user
-        if new_username:
-            user.username = new_username
         if new_email:
             user.email = new_email
         
