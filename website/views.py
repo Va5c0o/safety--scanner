@@ -5,7 +5,18 @@ from .models import Note, User  # Samenvoegen van imports voor duidelijkheid
 from . import db
 import json
 import subprocess
+import ipaddress
 import datetime
+# from flask_wtf.csrf import CSRFProtect
+import logging
+
+# Configuratie van het logboek
+logging.basicConfig(filename='app.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+
+# csrf = CSRFProtect()
+# csrf.init_app(app)
+
 
 # Blueprint voor de views
 views = Blueprint('views', __name__)
@@ -47,28 +58,38 @@ def delete_note():
 @login_required
 def scan():
     ip_address = request.form['ipAddress']
-    command = f'nmap {ip_address}'  # Voer de nmap-scan uit met het ingevoerde IP
+
+    try:
+        ip_address = ipaddress.IPv4Address(ip_address)
+    except ipaddress.AddressValueError:
+        flash('Ongeldig IP-adres', category='error')
+        logging.error('Ongeldig IP-adres ingevoerd')  # Logboekregistratie voor ongeldig IP-adres
+        return redirect(url_for('views.home'))
+
+    command = f'nmap {ip_address}'
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
-    
-    # Verwerk de scanresultaten en stuur deze naar de resultatenpagina
     scan_results = result.stdout
-    
-    # Stuur de resultaten naar de resultatenpagina samen met de gebruiker
+
     return render_template('results.html', scan_results=scan_results, user=current_user)
 
-# Route voor het uitvoeren van een poortscan
 @views.route('/port_scan', methods=['POST'])
 @login_required
 def port_scan():
     ip_address = request.form['ipAddressPort']
-    command = f'nmap {ip_address}'  # Voer de nmap-scan uit voor poortscan
+
+    try:
+        ip_address = ipaddress.IPv4Address(ip_address)
+    except ipaddress.AddressValueError:
+        flash('Ongeldig IP-adres', category='error')
+        logging.error('Ongeldig IP-adres ingevoerd')  # Logboekregistratie voor ongeldig IP-adres
+        return redirect(url_for('views.home'))
+
+    command = f'nmap {ip_address}'
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
-    scan_results = result.stdout  # Ontvang de uitvoer van de poortscan
+    scan_results = result.stdout
 
-    # Print de scanresultaten naar de terminal/console
-    print(scan_results)
+    print(scan_results)  # Logging naar de console voor poortscanresultaten
 
-    # Stuur de scanresultaten naar de 'results.html'-pagina
     return render_template('results.html', scan_results=scan_results)
 
 # Route voor het tonen van poortscanresultaten

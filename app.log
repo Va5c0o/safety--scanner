@@ -1,0 +1,15 @@
+2024-01-22 12:07:22,421 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2024-01-22 12:07:22,421 - INFO - [33mPress CTRL+C to quit[0m
+2024-01-22 12:07:22,424 - INFO -  * Restarting with stat
+2024-01-22 12:07:22,793 - WARNING -  * Debugger is active!
+2024-01-22 12:07:22,804 - INFO -  * Debugger PIN: 122-864-778
+2024-01-22 12:08:19,329 - INFO -  * Detected change in '/Applications/XAMPP/xamppfiles/htdocs/opdrachten school/safety--scanner/main.py', reloading
+2024-01-22 12:08:19,424 - INFO -  * Restarting with stat
+2024-01-22 12:08:41,869 - INFO - 127.0.0.1 - - [22/Jan/2024 12:08:41] "GET / HTTP/1.1" 200 -
+2024-01-22 12:08:42,040 - INFO - 127.0.0.1 - - [22/Jan/2024 12:08:42] "[36mGET /static/index.js HTTP/1.1[0m" 304 -
+2024-01-22 12:08:42,072 - INFO - 127.0.0.1 - - [22/Jan/2024 12:08:42] "[33mGET /apple-touch-icon-precomposed.png HTTP/1.1[0m" 404 -
+2024-01-22 12:08:42,075 - INFO - 127.0.0.1 - - [22/Jan/2024 12:08:42] "[33mGET /apple-touch-icon.png HTTP/1.1[0m" 404 -
+2024-01-22 12:08:42,140 - INFO - 127.0.0.1 - - [22/Jan/2024 12:08:42] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2024-01-22 12:12:46,100 - INFO - 127.0.0.1 - - [22/Jan/2024 12:12:46] "POST /scan HTTP/1.1" 200 -
+2024-01-22 12:12:46,304 - INFO - 127.0.0.1 - - [22/Jan/2024 12:12:46] "[36mGET /static/index.js HTTP/1.1[0m" 304 -
