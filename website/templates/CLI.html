@@ -3,53 +3,65 @@
 {% block title %}CLI{% endblock %}
 
 {% block content %}
+<!-- Stijlinstellingen voor de CLI-interface -->
 <style>
   .cli-container {
-  width: 80%;
-  max-width: 600px;
-  margin: 20px auto;
-  border: 1px solid #ccc;
-  padding: 10px;
-  font-family: monospace;
-  background-color: black;
-  color: white;
-}
-.cli-input {
-  color: limegreen;
-}
+    width: 80%;
+    max-width: 600px;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-family: monospace;
+    background-color: black;
+    color: white;
+  }
+  .cli-input {
+    color: limegreen;
+  }
 </style>
+
 <br>
+<!-- Titel voor de CLI-interface -->
 <h1 align="center">
   Command Line Interface (CLI)
 </h1>
 <br>
+
 <div>
+  <!-- Elementen voor de CLI-uitvoer en invoer -->
   <div id="cli-output"></div>
-  <div><span class="cli-input">gebruiker@VascoOveres:~$</span> <span id="userInput" contenteditable="true"></span></div>
+  <div>
+    <!-- Weergave van de CLI-prompt en invoerveld voor commando's -->
+    <span class="cli-input">gebruiker@VascoOveres:~$</span>
+    <span id="userInput" contenteditable="true"></span> <!-- Invoerveld voor commando's -->
+  </div>
 </div>
 
 <script>
+// JavaScript voor interactie met de CLI-interface
 const cliOutput = document.getElementById("cli-output");
 const userInput = document.getElementById("userInput");
 
-userInput.focus();
+userInput.focus(); // Focus op het invoerveld voor commando's
 
+// Luister naar toetsaanslagen in het invoerveld voor commando's
 userInput.addEventListener("keydown", function(event) {
-  if (event.key === "Enter") {
+  if (event.key === "Enter") { // Als Enter wordt ingedrukt
       event.preventDefault();
-      let command = userInput.innerText.trim();
-      userInput.innerText = ""; // Leeg de invoer na Enter
-      
-      // Simuleer de verwerking van het commando en toon het resultaat in de CLI-uitvoer
+      let command = userInput.innerText.trim(); // Haal de ingevoerde tekst op
+      userInput.innerText = ""; // Leeg het invoerveld na Enter
+
+      // Stuur het ingevoerde commando naar de server voor verwerking
       fetch("{{ url_for('views.cli') }}", {
           method: "POST",
           headers: {
               "Content-Type": "application/x-www-form-urlencoded"
           },
-          body: new URLSearchParams({ userInput: command })
+          body: new URLSearchParams({ userInput: command }) // Stuur het commando in de request body
       })
       .then(response => response.json())
       .then(data => {
+          // Toon het resultaat van het commando in de CLI-uitvoer
           const output = document.createElement("div");
           output.innerText = data.response;
           cliOutput.appendChild(output);
